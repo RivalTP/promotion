@@ -1,2 +1,2 @@
 # promotion
-A interview project
+An interview project
