@@ -1,0 +1,332 @@
+﻿@using Promotion.Models;
+
+@model MPromotion
+
+
+@{
+    ViewData["Title"] = "Index";
+
+}
+
+
+@{
+    List<SelectListItem> listPromo = new List<SelectListItem>();
+    listPromo.Add(new SelectListItem { Text = "Simple Discount", Value = "S" });
+    listPromo.Add(new SelectListItem { Text = "Completed Discount", Value = "C", Selected = true });
+}
+
+@{
+    List<SelectListItem> ListValue = new List<SelectListItem>();
+    ListValue.Add(new SelectListItem { Text = "Percentage", Value = "P" });
+    ListValue.Add(new SelectListItem { Text = "Amout", Value = "A", Selected = true });
+}
+
+
+<div class="col-11 mx-auto pt-0 p-0">
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.promoID)
+                    @Html.TextBoxFor(m => m.promoID, new {@class = "form-control", @readonly = "readonly"})
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.promoDescription)
+                    @Html.TextBoxFor(m => m.promoDescription, new {@class = "form-control"})
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+
+                    @Html.LabelFor(m => m.promoType)
+                    @Html.DropDownList("promoType", listPromo, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.promoStartDate)
+                            @Html.TextBoxFor(m => m.promoStartDate, new {@class = "form-control" , @readonly = "readonly"})
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.promoEndDate)
+                            @Html.TextBoxFor(m => m.promoEndDate, new {@class = "form-control" , @readonly = "readonly"})
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.valueType)
+                            @Html.DropDownList("valueType", ListValue, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.Label("-","-")
+                            @Html.TextBoxFor(m => m.valueTotal, new {@class = "form-control"})
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-9" style="padding-right:0px !important">
+                                <div class="form-group">
+
+                                    @Html.LabelFor(m => m.itemUpload)
+                                    @Html.TextBox("itemUpload", "Browse file..", new {@class = "form-control" , onclick="javascript:document.getElementById('customFile').click();", @readonly ="readonly" })
+
+
+                                    @*
+                                    <input id="txt" type="text" value="Upload Files" onclick="javascript:document.getElementById('customFile').click();">*@
+                                </div>
+                            </div>
+                            <div class="col-md-3" style="padding-left:0px !important">
+                                <div class="form-group">
+                                    <input type="file" asp-for="itemUpload" class="btn-primary" style="visibility:hidden;" id="customFile" onchange="getFileName()" />
+                                    <button type="button" id="uploadBtn" class="btn btn-primary" onclick="uploadFile()">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="datepicker"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Store","Store")
+                    <table id="tblItem" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td>@Html.CheckBox("all", false, new {Value="all"})</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Stores)
+                            {
+                                <tr>
+                                    <td>@Html.CheckBox(item.storeID.ToString(), false, new {Value=item.storeID})</td>
+                                    <td>@item.storeID</td>
+                                    <td>@item.storeName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary w-25" style="border-radius:15px;" onclick="submitData();"><i class="fa fa-home">Submit</i></button>&nbsp;
+                <button type="reset" class="btn btn-danger w-25" style="border-radius:15px;" onclick="return cancelData()"><i class="fa fa-home">Cancel</i></button>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+@section Scripts
+    {
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        .dp-highlight .ui-state-default {
+            background: #484;
+            color: #FFF;
+        }
+
+        .ui-datepicker.ui-datepicker-multi {
+            width: 100% !important;
+        }
+
+        .ui-datepicker-multi .ui-datepicker-group {
+            float: none;
+        }
+
+        #datepicker {
+            width: 100% !important;
+            height: 300px;
+            overflow-x: scroll;
+        }
+
+        .ui-widget {
+            font-size: 100%;
+            width: 100%;
+        }
+
+    </style>
+    <script>
+        $(function() {
+            loadPromoID();
+            loadCustomeDatePicker();
+            loadCheckBox();
+        });
+
+        function loadCustomeDatePicker() {
+            $("#promoStartDate").val('');
+            $("#promoEndDate").val('');
+            $(".datepicker").datepicker({
+                minDate: 0,
+                numberOfMonths: [1, 1],
+                beforeShowDay: function(date) {
+                    var date1 = $.datepicker.parseDate($.datepicker._defaults.dateFormat, $("#promoStartDate").val());
+                    var date2 = $.datepicker.parseDate($.datepicker._defaults.dateFormat, $("#promoEndDate").val());
+
+                    return [true, date1 && ((date.getTime() == date1.getTime()) || (date2 && date >= date1 && date <= date2)) ? "dp-highlight" : ""];
+                },
+                onSelect: function(dateText, inst) {
+                    var date1 = $.datepicker.parseDate($.datepicker._defaults.dateFormat, $("#promoStartDate").val());
+                    var date2 = $.datepicker.parseDate($.datepicker._defaults.dateFormat, $("#promoEndDate").val());
+                    var selectedDate = $.datepicker.parseDate($.datepicker._defaults.dateFormat, dateText);
+
+                    if (!date1 || date2) {
+                        $("#promoStartDate").val(dateText);
+                        $("#promoEndDate").val("");
+                        $(this).datepicker();
+                    } else if (selectedDate < date1) {
+                        $("#promoEndDate").val($("#promoStartDate").val());
+                        $("#promoStartDate").val(dateText);
+                        $(this).datepicker();
+                    } else {
+                        $("#promoEndDate").val(dateText);
+                        $(this).datepicker();
+                    }
+                }
+
+            });
+        }
+
+        function loadCheckBox() {
+            $('#all').click(function(event) {
+                if (this.checked) {
+                    // Iterate each checkbox
+                    $(':checkbox').each(function() {
+                        this.checked = true;
+                    });
+                } else {
+                    $(':checkbox').each(function() {
+                        this.checked = false;
+                    });
+                }
+            });
+        }
+
+        function loadPromoID() {
+            $('#promoID').val('P' + (new Date().toJSON().slice(0, 10).replace(/-/g, '')) + '0001')
+        }
+        function getFileName() {
+            $("#itemUpload").val($('input[type=file]').val().split('\\').pop());
+        }
+
+        function uploadFile() {
+            var files = document.getElementById('customFile').files;// $('#file').files[0];// e.target.files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: '/Promotion/UploadFile',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function(result) {
+                            alert(result);
+                            document.getElementById('customFile').value = null;
+                            $('#itemUpload').val('Browse File..')
+                        },
+                        error: function(xhr, status, p3, p4) {
+                            alert('There is an issue when uploading data !');
+                        }
+                    });
+                } else {
+                    alert("NOT FOR IE OKAY ?!");
+                }
+            }
+        }
+
+        function submitData() {
+            var items = [];
+            $('#tblItem > tbody  > tr').each(function(index, tr) {
+                var checkBox = $(tr).children().find('input');
+                if (checkBox.prop("checked")) {
+                    const obj = { storeID: checkBox.val(), storeName: "" };
+                    items.push(obj);
+                }
+            });
+
+
+
+            var data = {
+
+                promoID: $('#promoID').val(),
+                promoDescription: $('#promoDescription').val(),
+                promoType: $('#promoType').val(),
+                promoStartDate: $('#promoStartDate').val(),
+                promoEndDate: $('#promoEndDate').val(),
+                valueType: $('#valueType').val(),
+                valueTotal: $('#valueTotal').val(),
+                Stores: items
+
+            };
+
+            $.ajax({
+                type: "POST",
+                data: data,
+                url: '/Promotion/Add',
+            }).done(function(res) {
+                $('#promoID').val(res);
+                window.location = window.location.origin + '/Promotion/DownloadFile?fileName=' +res;
+            });
+        }
+
+        function cancelData() {
+            $(".datepicker").datepicker("destroy");
+            loadCustomeDatePicker();
+            $(':checkbox').each(function() {
+                this.checked = false;
+            });
+            $('#valueTotal').val("0");
+            $('#promoDescription').val("");
+            $('#promoDescription').val("");
+            document.getElementById('customFile').value = null;
+            $('#itemUpload').val('Browse File..')
+            return true;
+        }
+
+    </script>
+}
+

@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Promotion</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-2 bg-orange">
+            <div class="row" style="height:150px;">
+                <div class="col-md-12" style="text-align:center; margin-top:50px;">
+                    <img width="75" height="75" style="border:2px; border-radius:50px;" src="https://www.bing.com/th?id=A8b7ffe54044ce2871ae36c2d3aa8f441&w=124&h=168&c=7&o=6&pid=SANGAM" >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="margin-left:20px;">
+                    <strong>
+                        <h2>Home Promotion</h2>
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-10 " style="padding-left:0px !important;">
+            <nav class="bg-mocca navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+                <div class="container ">
+
+                    <a class="navbar-brand " asp-area="" asp-controller="Promotion" asp-action="Index">Promotion</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            @*<li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Promotion" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>*@
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="container">
+                    @RenderBody()
+             
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Promotion - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
